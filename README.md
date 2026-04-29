@@ -237,4 +237,4 @@ applied-ai-system-final/
     └── winning-game.jpg           # Screenshot from original project
 ```
 
-> The original project README is preserved in [OLD-README.md](OLD-README.md).
+> The original project README is preserved in [OLD-README.md](docs/OLD-README.md).
