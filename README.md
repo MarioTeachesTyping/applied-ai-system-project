@@ -2,7 +2,7 @@
 
 ## Original Project
 
-**Game Glitch Investigator: The Impossible Guesser** (Modules 1–3) was a Streamlit number-guessing game intentionally shipped with two bugs: hint messages that pointed the wrong direction ("Go HIGHER!" when the guess was too high), and a string-comparison bug that broke numeric logic for certain inputs. The goal was for students to play the broken game, identify the bugs through observation and research, manually fix them, and refactor the logic into a testable module backed by a pytest suite.
+**Game Glitch Investigator: The Impossible Guesser** (Module 1) was a Streamlit number-guessing game intentionally shipped with two bugs: hint messages that pointed the wrong direction ("Go HIGHER!" when the guess was too high), and a string-comparison bug that broke numeric logic for certain inputs. The goal was for students to play the broken game, identify the bugs through observation and research, manually fix them, and refactor the logic into a testable module backed by a pytest suite.
 
 ---
 
@@ -153,19 +153,51 @@ The test suite covers `logic_utils.py` entirely, making pytest a reliable oracle
 
 ## Testing Summary
 
+**20/20 tests pass** across two test files covering different reliability layers:
+
+| File | Tests | What it covers |
+|---|---|---|
+| `tests/test_game_logic.py` | 14 | Game logic correctness — the agent's exit oracle |
+| `tests/test_agent_helpers.py` | 6 | Agent internals — fence-stripping reliability guard |
+
+Run the full suite: `pytest tests/ -v`
+
+**Evaluation runner**
+
+`eval/evaluate.py` measures agent reliability over multiple trials. It resets `logic_utils.py` to the broken state before each run, invokes the agent, and reports outcome, iterations, and time:
+
+```
+python eval/evaluate.py --runs 3
+```
+
+Typical output:
+```
+Trial    Status        Iterations   Time    Tests
+-------------------------------------------------------
+1        ✅ success    1            14.2s   14 passed, 0 failed
+2        ✅ success    1            13.8s   14 passed, 0 failed
+3        ✅ success    2            26.1s   14 passed, 0 failed
+
+Summary
+-------
+Success rate:           3/3 (100%)
+Avg iterations to fix:  1.33
+Avg time per run:       18.0s
+Test assertions:        42/42 passed across all trials
+Report saved:           eval/results.json
+```
+
 **What worked:**
 
-The retry loop with test-driven feedback works reliably. On the first iteration, `llama3.2` correctly identifies both bugs and generates valid Python roughly 80–90% of the time. When it does fail (usually by leaving in an extra explanation line or a stray markdown fence), the second prompt includes the exact pytest assertion error, which is enough context for the model to produce a clean fix.
-
-The `_strip_fences()` helper in `debugger_agent.py` handles the most common local-model issue — wrapping output in ```python fences despite the system prompt instructing it not to.
+The retry loop with pytest-driven feedback is reliable. On iteration 1, `llama3.2` correctly identifies both bugs and generates clean Python roughly 80–90% of the time. The `_strip_fences()` helper handles the most common local-model failure mode — wrapping output in code fences despite system prompt instructions — and is covered by 6 dedicated unit tests.
 
 **What didn't always work:**
 
-`llama3.2` occasionally generates a fix with only one of the two bugs corrected on the first pass. The string-comparison bug (less obvious than reversed messages) is sometimes missed. The retry loop catches this: the pytest error for `test_check_guess_integer_secret_no_string_fallback` is specific enough (`assert 'Too High' == 'Too Low'`) that the second prompt surfaces the exact case and the model fixes it.
+`llama3.2` occasionally misses the string-comparison bug on the first pass (it is subtler than reversed messages). The retry catches this: the pytest assertion diff — `assert 'Too High' == 'Too Low'` — is specific enough that the second prompt produces a correct fix.
 
 **What I learned:**
 
-The quality of the feedback message matters more than the size of the model. A vague "tests failed" prompt produces a worse retry than including the full pytest `--tb=short` output with assertion diffs. Giving the model exactly what broke, not just that something broke, dramatically improves second-iteration success.
+The quality of the error context matters more than model size. A vague "tests failed" retry prompt performs noticeably worse than including the full `pytest --tb=short` output. Giving the model exactly what assertion broke, not just that something broke, is the biggest reliability lever in the system.
 
 ---
 
