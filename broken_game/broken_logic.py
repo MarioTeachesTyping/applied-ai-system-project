@@ -38,11 +38,19 @@ def check_guess(guess, secret):
 
     outcome examples: "Win", "Too High", "Too Low"
     """
-    if guess == secret:
+    # BUG 1: converts both values to strings, breaking numeric comparison.
+    # String comparison is lexicographic: "9" > "10" evaluates to True,
+    # so check_guess(9, 10) incorrectly returns "Too High" instead of "Too Low".
+    secret = str(secret)
+    guess_str = str(guess)
+
+    if guess_str == secret:
         return "Win", "🎉 Correct!"
-    if guess > secret:
-        return "Too High", "📉 Go LOWER!"
-    return "Too Low", "📈 Go HIGHER!"
+    if guess_str > secret:
+        # BUG 2: hint message is backwards — a too-high guess should say "Go LOWER!"
+        return "Too High", "📈 Go HIGHER!"
+    # BUG 2: hint message is backwards — a too-low guess should say "Go HIGHER!"
+    return "Too Low", "📉 Go LOWER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
