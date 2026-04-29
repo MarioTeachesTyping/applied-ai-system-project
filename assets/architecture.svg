@@ -1,0 +1,133 @@
+<svg width="960" height="470" viewBox="0 0 960 470" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Arial, sans-serif">
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#484f58"/>
+    </marker>
+    <marker id="arrG" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#3fb950"/>
+    </marker>
+    <marker id="arrR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0,0 8,3 0,6" fill="#da3633"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="470" fill="#0d1117" rx="10"/>
+
+  <!-- Title -->
+  <text x="480" y="34" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="bold">AI Debugging Agent — System Architecture</text>
+  <line x1="20" y1="46" x2="940" y2="46" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Section labels -->
+  <text x="85" y="70" text-anchor="middle" fill="#6e7681" font-size="9" letter-spacing="1.5">INPUT</text>
+  <text x="520" y="70" text-anchor="middle" fill="#6e7681" font-size="9" letter-spacing="1.5">AGENTIC LOOP</text>
+  <text x="903" y="70" text-anchor="middle" fill="#6e7681" font-size="9" letter-spacing="1.5">OUTPUT</text>
+
+  <!-- ── INPUT ── -->
+  <rect x="20" y="162" width="130" height="56" rx="6" fill="#1f0c0c" stroke="#da3633" stroke-width="1.5"/>
+  <text x="85" y="184" text-anchor="middle" fill="#f85149" font-size="12" font-weight="bold">broken_logic.py</text>
+  <text x="85" y="200" text-anchor="middle" fill="#8b949e" font-size="10">2 bugs planted</text>
+  <text x="85" y="213" text-anchor="middle" fill="#6e7681" font-size="9">frozen artifact</text>
+
+  <line x1="150" y1="190" x2="186" y2="190" stroke="#484f58" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── Phase 1: OBSERVE ── -->
+  <rect x="190" y="162" width="100" height="56" rx="6" fill="#0d1f3c" stroke="#388bfd" stroke-width="1.5"/>
+  <text x="240" y="183" text-anchor="middle" fill="#79c0ff" font-size="10" font-weight="bold">① OBSERVE</text>
+  <text x="240" y="198" text-anchor="middle" fill="#8b949e" font-size="9">read source</text>
+  <text x="240" y="211" text-anchor="middle" fill="#8b949e" font-size="9">into context</text>
+
+  <line x1="290" y1="190" x2="326" y2="190" stroke="#484f58" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── Phase 2: PLAN ── -->
+  <rect x="330" y="162" width="100" height="56" rx="6" fill="#0d1f3c" stroke="#388bfd" stroke-width="1.5"/>
+  <text x="380" y="183" text-anchor="middle" fill="#79c0ff" font-size="10" font-weight="bold">② PLAN</text>
+  <text x="380" y="198" text-anchor="middle" fill="#8b949e" font-size="9">identify bugs</text>
+  <text x="380" y="211" text-anchor="middle" fill="#8b949e" font-size="9">+ root cause</text>
+  <rect x="345" y="228" width="70" height="18" rx="3" fill="#1a0d2e" stroke="#8957e5" stroke-width="1"/>
+  <text x="380" y="241" text-anchor="middle" fill="#bc8cff" font-size="8.5">llama3.2 · Ollama</text>
+
+  <line x1="430" y1="190" x2="466" y2="190" stroke="#484f58" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── Phase 3: FIX ── -->
+  <rect x="470" y="162" width="100" height="56" rx="6" fill="#0d1f3c" stroke="#388bfd" stroke-width="1.5"/>
+  <text x="520" y="183" text-anchor="middle" fill="#79c0ff" font-size="10" font-weight="bold">③ FIX</text>
+  <text x="520" y="198" text-anchor="middle" fill="#8b949e" font-size="9">generate</text>
+  <text x="520" y="211" text-anchor="middle" fill="#8b949e" font-size="9">corrected code</text>
+  <rect x="485" y="228" width="70" height="18" rx="3" fill="#1a0d2e" stroke="#8957e5" stroke-width="1"/>
+  <text x="520" y="241" text-anchor="middle" fill="#bc8cff" font-size="8.5">llama3.2 · Ollama</text>
+
+  <line x1="570" y1="190" x2="606" y2="190" stroke="#484f58" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── Phase 4: TEST ── -->
+  <rect x="610" y="162" width="100" height="56" rx="6" fill="#0c2318" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="660" y="183" text-anchor="middle" fill="#56d364" font-size="10" font-weight="bold">④ TEST</text>
+  <text x="660" y="198" text-anchor="middle" fill="#8b949e" font-size="9">run pytest</text>
+  <text x="660" y="211" text-anchor="middle" fill="#8b949e" font-size="9">14 test cases</text>
+  <rect x="625" y="228" width="70" height="18" rx="3" fill="#0c1f0c" stroke="#3fb950" stroke-width="1"/>
+  <text x="660" y="241" text-anchor="middle" fill="#7ee787" font-size="8.5">pytest oracle</text>
+
+  <line x1="710" y1="190" x2="731" y2="190" stroke="#484f58" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── Phase 5: EVALUATE (diamond) ── -->
+  <polygon points="790,160 845,190 790,220 735,190" fill="#1c1a0d" stroke="#e3b341" stroke-width="1.5"/>
+  <text x="790" y="185" text-anchor="middle" fill="#e3b341" font-size="10" font-weight="bold">⑤ EVAL</text>
+  <text x="790" y="200" text-anchor="middle" fill="#d29922" font-size="9">pass?</text>
+
+  <!-- EVALUATE pass → OUTPUT -->
+  <line x1="845" y1="190" x2="861" y2="190" stroke="#3fb950" stroke-width="1.5" marker-end="url(#arrG)"/>
+  <text x="853" y="183" text-anchor="middle" fill="#56d364" font-size="8">pass</text>
+
+  <!-- ── OUTPUT ── -->
+  <rect x="865" y="162" width="75" height="56" rx="6" fill="#0c2318" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="903" y="182" text-anchor="middle" fill="#56d364" font-size="11" font-weight="bold">FIXED ✓</text>
+  <text x="903" y="197" text-anchor="middle" fill="#8b949e" font-size="9">logic_utils</text>
+  <text x="903" y="210" text-anchor="middle" fill="#8b949e" font-size="9">.py</text>
+
+  <!-- ── RETRY LOOP ── -->
+  <!-- Down from EVALUATE bottom -->
+  <line x1="790" y1="220" x2="790" y2="300" stroke="#da3633" stroke-width="1.5"/>
+  <text x="800" y="266" fill="#f85149" font-size="8.5">fail</text>
+  <!-- Left to left side of FIX box (x=476 avoids the Ollama badge below FIX) -->
+  <line x1="790" y1="300" x2="476" y2="300" stroke="#da3633" stroke-width="1.5"/>
+  <!-- Retry label above the horizontal line -->
+  <text x="633" y="294" text-anchor="middle" fill="#f85149" font-size="8.5">retry (max 3×) — pass error context back to ③</text>
+  <!-- Up into FIX box bottom -->
+  <line x1="476" y1="300" x2="476" y2="219" stroke="#da3633" stroke-width="1.5" marker-end="url(#arrR)"/>
+
+  <!-- ── HUMAN / STREAMLIT BAR ── -->
+  <rect x="20" y="328" width="920" height="62" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="480" y="346" text-anchor="middle" fill="#6e7681" font-size="9" font-weight="bold" letter-spacing="1.5">HUMAN · STREAMLIT UI</text>
+  <rect x="32" y="352" width="118" height="28" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="91" y="371" text-anchor="middle" fill="#8b949e" font-size="9">🔄 Reset broken state</text>
+  <rect x="160" y="352" width="120" height="28" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="220" y="371" text-anchor="middle" fill="#8b949e" font-size="9">📋 Live step log</text>
+  <rect x="292" y="352" width="178" height="28" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="381" y="371" text-anchor="middle" fill="#8b949e" font-size="9">🧠 Bug analysis output</text>
+  <rect x="482" y="352" width="178" height="28" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="571" y="371" text-anchor="middle" fill="#8b949e" font-size="9">📊 Diff (broken → fixed)</text>
+  <rect x="672" y="352" width="256" height="28" rx="4" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="800" y="371" text-anchor="middle" fill="#8b949e" font-size="9">🧪 pytest output + pass/fail count</text>
+
+  <!-- Dashed connectors to human bar (only phases that don't cross retry loop) -->
+  <line x1="240" y1="218" x2="240" y2="328" stroke="#21262d" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="660" y1="246" x2="660" y2="328" stroke="#21262d" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="903" y1="218" x2="903" y2="328" stroke="#21262d" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- ── LEGEND ── -->
+  <rect x="20" y="406" width="920" height="50" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="48" y="421" fill="#6e7681" font-size="9" font-weight="bold">LEGEND</text>
+  <rect x="104" y="412" width="10" height="10" rx="1" fill="#0d1f3c" stroke="#388bfd" stroke-width="1"/>
+  <text x="119" y="421" fill="#79c0ff" font-size="9">Agent phase</text>
+  <rect x="215" y="412" width="10" height="10" rx="1" fill="#1a0d2e" stroke="#8957e5" stroke-width="1"/>
+  <text x="230" y="421" fill="#bc8cff" font-size="9">LLM · Ollama (local, no API key)</text>
+  <rect x="430" y="412" width="10" height="10" rx="1" fill="#0c2318" stroke="#3fb950" stroke-width="1"/>
+  <text x="445" y="421" fill="#56d364" font-size="9">Test oracle / success</text>
+  <rect x="590" y="412" width="10" height="10" rx="1" fill="#1f0c0c" stroke="#da3633" stroke-width="1"/>
+  <text x="605" y="421" fill="#f85149" font-size="9">Broken input / retry path</text>
+  <rect x="770" y="412" width="10" height="10" rx="1" fill="#1c1a0d" stroke="#e3b341" stroke-width="1"/>
+  <text x="785" y="421" fill="#e3b341" font-size="9">Decision point</text>
+  <text x="48" y="446" fill="#6e7681" font-size="8.5">Data flows left → right. On test failure, pytest error output is fed back into Phase ③ as context (max 3 iterations). Human can reset at any time.</text>
+
+</svg>
