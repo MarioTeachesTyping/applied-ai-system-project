@@ -6,8 +6,6 @@ def get_range_for_difficulty(difficulty: str):
         return 1, 100
     elif difficulty == "Hard":
         return 1, 50
-    else:
-        raise ValueError("Invalid difficulty level")
 
 
 def parse_guess(raw: str):
@@ -19,75 +17,68 @@ def parse_guess(raw: str):
     if raw is None:
         return False, None, "Enter a guess."
 
-    if raw == "":
-        return False, None, "Enter a guess."
-
     try:
         value = int(raw)
     except ValueError:
-        return False, None, "That is not an integer."
-    except Exception:
         return False, None, "That is not a number."
 
     return True, value, None
 
 
-def check_guess(guess: int, secret: int) -> tuple[str, str]:
+def check_guess(guess, secret):
     """
     Compare guess to secret and return (outcome, message).
+
+    outcome examples: "Win", "Too High", "Too Low"
     """
-    if guess > secret:
-        # Corrected hint message
-        return "Too High", "📈 Go LOWER!"
-    elif guess < secret:
-        # Corrected hint message
-        return "Too Low", "📉 Go HIGHER!"
-    else:  # Corrected logic for correct guess
-        return "Win", "🎉 Correct!"
+    if guess == secret:
+        return "Win", f"Correct! You guessed the number in {1} attempt(s)."
+    elif guess > secret:
+        return "Too High", "Go LOWER!"
+    else:
+        return "Too Low", "Go HIGHER!"
 
 
-def update_score(current_score: int, outcome: str, attempt_number: int) -> int:
-    """Update score based on outcome and attempt number."""
+def update_score(current_score: int, outcome: str):
+    """Update score based on outcome."""
     if outcome == "Win":
-        points = 100 - (10 * (attempt_number + 1))
-        return current_score + min(points, 10)
+        # Calculate points correctly
+        points = 100 - (current_score // 10) * 10
+        return current_score + points
+    elif outcome in ["Too High", "Too Low"]:
+        # Deduct consistent points for incorrect guesses
+        return current_score - 5
+    else:
+        # Handle unexpected outcomes
+        return current_score
 
-    # Corrected scoring for too high or low attempts
-    return current_score
 
-
-def play_game():
-    difficulty = input("Choose a difficulty level: ")
-    try:
-        lower, upper = get_range_for_difficulty(difficulty)
-        secret = lower + (upper - lower) * random.randint(0, 1)
-    except ValueError as e:
-        print(e)
-        return
-
+def game():
+    print("Welcome to the number guessing game!")
+    difficulty = input("Choose a difficulty (Easy/Normal/Hard): ")
+    min_val, max_val = get_range_for_difficulty(difficulty)
+    
+    attempts = 0
     while True:
-        guess = int(input("Guess the number between {} and {}: ".format(lower, upper)))
-        if guess < lower or guess > upper:
-            print("Please enter a number within the range.")
+        guess = parse_guess(input(f"Guess a number between {min_val} and {max_val}: "))
+        
+        if not guess[0]:
+            print(guess[2])
             continue
-        if not parse_guess(guess):
-            print("Invalid input. Please try again.")
-            continue
-
-        outcome = check_guess(guess, secret)
-        message, _ = outcome
-
-        current_score = update_score(0, *outcome)
-
-        if guess == secret:
-            print(message)
+        
+        secret = random.randint(min_val, max_val)
+        
+        outcome = check_guess(guess[1], secret)
+        score = update_score(0, outcome)
+        
+        attempts += 1
+        print(outcome)
+        print(f"Your current score is: {score}")
+        
+        if outcome == "Win":
             break
-        else:
-            print(message)
 
 
 import random
 
-
-if __name__ == "__main__":
-    play_game()
+game()

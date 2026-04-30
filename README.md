@@ -32,7 +32,7 @@ The system has five phases that run in a loop:
 
 The **retry loop** is what makes this agentic rather than a one-shot prompt. On failure, the full pytest error output — exact assertion failures, line numbers, diff — is included in the next fix prompt so the model can correct specifically what broke. Maximum iterations is capped at 3.
 
-The **Streamlit UI** (`pages/1_AI_Debugger.py`) streams each phase update live, then displays the bug analysis, a unified diff of the changes, and the final pytest output side by side. A sidebar reset button restores `logic_utils.py` to the broken state so the demo is fully repeatable.
+The **Streamlit UI** (`pages/ai_debugger.py`) streams each phase update live, then displays the bug analysis, a unified diff of the changes, and the final pytest output side by side. A sidebar reset button restores `logic_utils.py` to the broken state so the demo is fully repeatable.
 
 ---
 
@@ -227,7 +227,8 @@ applied-ai-system-final/
 │   └── prompts.py                # LLM prompt templates
 │
 ├── pages/
-│   └── 1_AI_Debugger.py          # Streamlit UI for the agent
+│   ├── game.py                   # Guessing game page
+│   └── ai_debugger.py            # Streamlit UI for the agent
 │
 ├── tests/
 │   └── test_game_logic.py        # pytest suite (14 tests — the oracle)
