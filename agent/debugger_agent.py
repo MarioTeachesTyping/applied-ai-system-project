@@ -76,16 +76,21 @@ def _run_pytest() -> tuple[bool, str]:
 
 # ── agent phases ───────────────────────────────────────────────────────────────
 
-def _analyze_bugs(client: ollama.Client, code: str) -> str:
+def _analyze_bugs(client: ollama.Client, code: str, token_cb=None) -> str:
     logger.info("Phase PLAN: calling %s for bug analysis", OLLAMA_MODEL)
-    response = client.chat(
+    stream = client.chat(
         model=OLLAMA_MODEL,
         messages=[
             {"role": "system", "content": ANALYZE_SYSTEM},
             {"role": "user", "content": ANALYZE_USER.format(code=code)},
         ],
+        stream=True,
     )
-    analysis = response.message.content
+    analysis = ""
+    for chunk in stream:
+        analysis += chunk.message.content
+        if token_cb:
+            token_cb(analysis)
     logger.info("Bug analysis:\n%s", analysis)
     return analysis
 
@@ -95,6 +100,7 @@ def _generate_fix(
     broken_code: str,
     bug_analysis: str,
     test_error: str | None,
+    token_cb=None,
 ) -> str:
     logger.info("Phase FIX: calling %s to generate corrected code", OLLAMA_MODEL)
     error_section = ERROR_SECTION.format(test_error=test_error) if test_error else ""
@@ -103,21 +109,27 @@ def _generate_fix(
         bug_analysis=bug_analysis,
         error_section=error_section,
     )
-    response = client.chat(
+    stream = client.chat(
         model=OLLAMA_MODEL,
         messages=[
             {"role": "system", "content": FIX_SYSTEM},
             {"role": "user", "content": prompt},
         ],
+        stream=True,
     )
-    fixed = _strip_fences(response.message.content)
+    fixed = ""
+    for chunk in stream:
+        fixed += chunk.message.content
+        if token_cb:
+            token_cb(fixed)
+    fixed = _strip_fences(fixed)
     logger.info("Fix generated (%d chars)", len(fixed))
     return fixed
 
 
 # ── public API ─────────────────────────────────────────────────────────────────
 
-def run_debugger_agent(progress=None):
+def run_debugger_agent(progress=None, stream_callback=None):
     """
     Execute the full agentic debugging loop.
 
@@ -147,7 +159,7 @@ def run_debugger_agent(progress=None):
 
         # ── Phase 2: Plan ──────────────────────────────────────────────────────
         _update("PLAN", f"Asking {OLLAMA_MODEL} to identify bugs…")
-        bug_analysis = _analyze_bugs(client, broken_code)
+        bug_analysis = _analyze_bugs(client, broken_code, token_cb=stream_callback)
         _update("PLAN_DONE", bug_analysis)
 
         test_error: str | None = None
@@ -156,7 +168,7 @@ def run_debugger_agent(progress=None):
         for iteration in range(1, MAX_ITERATIONS + 1):
             # ── Phase 3: Fix ───────────────────────────────────────────────────
             _update("FIX", f"Generating fix (attempt {iteration}/{MAX_ITERATIONS})…")
-            fixed_code = _generate_fix(client, broken_code, bug_analysis, test_error)
+            fixed_code = _generate_fix(client, broken_code, bug_analysis, test_error, token_cb=stream_callback)
             TARGET_PATH.write_text(fixed_code, encoding="utf-8")
             _update("WRITE", f"Wrote fix to {TARGET_PATH.name}")
 

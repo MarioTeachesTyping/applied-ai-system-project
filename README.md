@@ -110,20 +110,20 @@ The fix removes the string cast and corrects both messages. The rest of the file
 
 **pytest output after fix is written:**
 ```
-tests/test_game_logic.py::test_winning_guess                          PASSED
-tests/test_game_logic.py::test_guess_too_high                         PASSED
-tests/test_game_logic.py::test_guess_too_low                          PASSED
-tests/test_game_logic.py::test_too_high_message_says_go_lower         PASSED
-tests/test_game_logic.py::test_too_low_message_says_go_higher         PASSED
+tests/test_game_logic.py::test_winning_guess                                  PASSED
+tests/test_game_logic.py::test_guess_too_high                                 PASSED
+tests/test_game_logic.py::test_guess_too_low                                  PASSED
+tests/test_game_logic.py::test_too_high_message_says_go_lower                 PASSED
+tests/test_game_logic.py::test_too_low_message_says_go_higher                 PASSED
 tests/test_game_logic.py::test_check_guess_integer_secret_no_string_fallback  PASSED
-tests/test_game_logic.py::test_check_guess_high_integers              PASSED
-tests/test_game_logic.py::test_parse_guess_valid_integer              PASSED
-tests/test_game_logic.py::test_parse_guess_empty_string               PASSED
-tests/test_game_logic.py::test_parse_guess_non_numeric                PASSED
-tests/test_game_logic.py::test_parse_guess_float_rounds_down          PASSED
-tests/test_game_logic.py::test_range_easy                             PASSED
-tests/test_game_logic.py::test_range_normal                           PASSED
-tests/test_game_logic.py::test_range_hard                             PASSED
+tests/test_game_logic.py::test_check_guess_high_integers                      PASSED
+tests/test_game_logic.py::test_parse_guess_valid_integer                      PASSED
+tests/test_game_logic.py::test_parse_guess_empty_string                       PASSED
+tests/test_game_logic.py::test_parse_guess_non_numeric                        PASSED
+tests/test_game_logic.py::test_parse_guess_float_rounds_down                  PASSED
+tests/test_game_logic.py::test_range_easy                                     PASSED
+tests/test_game_logic.py::test_range_normal                                   PASSED
+tests/test_game_logic.py::test_range_hard                                     PASSED
 
 14 passed in 0.02s
 ```
