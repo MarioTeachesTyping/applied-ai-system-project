@@ -33,7 +33,7 @@ It wrote the code, ran away, and now the game is unplayable.
 
 - [x] [Insert a screenshot of your fixed, winning game here]
 
-![Fixed Winning Game](assets/winning-game.jpg)
+![Fixed Winning Game](../assets/winning-game.jpg)
 
 ## 🚀 Stretch Features
 
