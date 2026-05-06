@@ -16,6 +16,46 @@ Rather than a human reading the code and applying fixes manually, a local LLM (l
 
 ---
 
+## Demo
+
+**Step 1 — Open the AI Debugger page.** The sidebar shows both pages. The "Broken Code" tab displays the frozen buggy artifact so you can see exactly what the agent will read.
+
+![Step 1](assets/step-1.png)
+
+**Step 2 — Switch to the "Run Agent" tab.** The Start button is ready. Nothing has run yet.
+
+![Step 2](assets/step-2.png)
+
+**Step 3 — Click "Start AI Debugger".** The phase bar activates and the agent begins. OBSERVE completes instantly, then PLAN lights up as the LLM starts reading the broken code.
+
+![Step 3](assets/step-3.png)
+
+**Step 4 — Live token streaming during PLAN.** The dark output box streams the LLM's raw response token-by-token as it thinks through the bugs in real time.
+
+![Step 4](assets/step-4.png)
+
+**Step 5 — PLAN completes, FIX begins.** The phase bar shows Plan green and Fix active. The phase log records PLAN_DONE and starts generating the corrected code (attempt 1/3).
+
+![Step 5](assets/step-5.png)
+
+**Step 6 — LLM streams the fix.** The live output box now shows the corrected `logic_utils.py` being written token-by-token during the FIX phase.
+
+![Step 6](assets/step-6.png)
+
+**Step 7 — Retry loop in action.** The first fix didn't pass all tests — pytest caught a failure. The agent automatically feeds the error output back as context and starts attempt 2/3.
+
+![Step 7](assets/step-7.png)
+
+**Step 8 — Success on attempt 2.** The phase log shows SUCCESS and the green banner confirms all tests passed in 2 iterations.
+
+![Step 8](assets/step-8.png)
+
+**Step 9 — Results panel.** Three columns show the full bug analysis from the LLM, a unified diff of every change made, and the complete pytest output confirming 20/20 tests passed.
+
+![Step 9](assets/step-9.png)
+
+---
+
 ## Architecture Overview
 
 ![System Architecture](assets/architecture.svg)
